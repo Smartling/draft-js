@@ -149,7 +149,7 @@ var DraftEditorCompositionHandler = {
     const mustReset = (
       !composedChars ||
       isSelectionAtLeafStart(editorState) ||
-      !editorState.getSelection().isCollapsed ||
+      !editorState.getSelection().isCollapsed() ||
       currentStyle.size > 0 ||
       entityKey !== null
     );
