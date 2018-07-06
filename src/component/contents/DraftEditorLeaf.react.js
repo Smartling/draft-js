@@ -113,12 +113,24 @@ class DraftEditorLeaf extends React.Component<Props> {
 
   shouldComponentUpdate(nextProps: Props): boolean {
     const leafNode = ReactDOM.findDOMNode(this.refs.leaf);
+    const {selection} = nextProps;
+    let hasSelection = false;
+    // If selection state is within the current leaf
+    // force an update
+    if (selection && selection.getHasFocus()) {
+      const {block, start, text} = nextProps;
+      const blockKey = block.getKey();
+      const end = start + text.length;
+      hasSelection = selection.hasEdgeWithin(blockKey, start, end);
+    }
+
     invariant(leafNode, 'Missing leafNode');
-    return (
+    const shouldUpdate =
       leafNode.textContent !== nextProps.text ||
       nextProps.styleSet !== this.props.styleSet ||
-      nextProps.forceSelection
-    );
+      hasSelection ||
+      nextProps.forceSelection;
+    return shouldUpdate;
   }
 
   componentDidUpdate(): void {
