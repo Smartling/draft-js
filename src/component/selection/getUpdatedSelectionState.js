@@ -37,6 +37,11 @@ function getUpdatedSelectionState(
 
   const anchorPath = DraftOffsetKey.decode(anchorKey);
   const anchorBlockKey = anchorPath.blockKey;
+
+  if (!editorState.getBlockTree(anchorBlockKey)) {
+    return selection;
+  }
+
   const anchorLeaf = editorState
     .getBlockTree(anchorBlockKey)
     .getIn([anchorPath.decoratorKey, 'leaves', anchorPath.leafKey]);
